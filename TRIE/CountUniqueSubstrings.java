@@ -1,7 +1,8 @@
 package TRIE;
 
-public class StartsWithProblem {
-     static class Node{
+public class CountUniqueSubstrings {
+
+    static class Node{
         Node children[] = new Node[26];
         boolean eow = false;
 
@@ -40,29 +41,27 @@ public class StartsWithProblem {
         return curr.eow == true;
     }
 
-    public static boolean startsWith(String prefix){
-        Node curr = root;
-
-        for(int i=0;i<prefix.length();i++){
-            int idx = prefix.charAt(i) - 'a';
-            if(curr.children[idx] == null){
-                return false;
+    public static int countNodes(Node root){
+        if(root == null){
+            return 0;
+        }
+        int count = 0;
+        for(int i=0;i<26;i++){
+            if(root.children[i] != null){
+                count += countNodes(root.children[i]);
             }
-            curr = curr.children[idx];
         }
-        return true;
+        return count + 1;
     }
-
     public static void main(String[] args) {
-        String words[] = {"apple","app","mango","man","woman"};
-        String prefix1 = "app";
-        String prefix2 = "moon";
+        String str = "ababa";
 
-        for(int i=0;i<words.length;i++){
-            insert(words[i]);
+        //suffix -> insert in trie
+
+        for(int i=0;i<str.length();i++){
+            String suffix = str.substring(i);
+            insert(suffix);
         }
-
-        System.out.println(startsWith(prefix2));
-        System.out.println(startsWith(prefix1));
+        System.out.println(countNodes(root));
     }
 }
